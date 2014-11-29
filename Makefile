@@ -50,7 +50,7 @@ PEP8 := $(BIN)/pep8
 FLAKE8 := $(BIN)/flake8
 PEP8RADIUS := $(BIN)/pep8radius
 PEP257 := $(BIN)/pep257
-NOSE := $(BIN)/nosetests
+PYTEST := $(BIN)/py.test
 COVERAGE := $(BIN)/coverage
 
 # Remove if you don't want pip to cache downloads
@@ -93,13 +93,12 @@ depends: .depends-ci .depends-dev
 .PHONY: .depends-ci
 .depends-ci: env Makefile $(DEPENDS_CI)
 $(DEPENDS_CI): Makefile
-	$(PIP) install $(PIP_CACHE) --upgrade flake8 pep257 nose coverage
-	$(PIP) install $(PIP_CACHE) --upgrade -r tests/requirements.txt
+	$(PIP) install $(PIP_CACHE) --upgrade flake8 pep257 pytest coverage mock nose
 	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
 .PHONY: .depends-dev
 .depends-dev: env Makefile $(DEPENDS_DEV)
-$(DEPENDS_DEV): Makefile tests/requirements.txt
+$(DEPENDS_DEV): Makefile
 	$(PIP) install $(PIP_CACHE) --upgrade pep8radius pygments wheel
 	touch $(DEPENDS_DEV)  # flag to indicate dependencies are installed
 
@@ -138,7 +137,8 @@ fix: .depends-dev
 
 .PHONY: test
 test: .depends-ci
-	$(NOSE) tests --with-coverage --cover-package=$(PACKAGE)
+	$(COVERAGE) run --source $(PACKAGE) -m py.test tests
+	$(COVERAGE) report -m
 
 .PHONY: htmlcov
 htmlcov: test
