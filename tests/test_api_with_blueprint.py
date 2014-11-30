@@ -1,4 +1,3 @@
-import unittest
 from flask import Flask, Blueprint, request
 try:
     from mock import Mock
@@ -24,7 +23,7 @@ class GoodbyeWorld(flask_restful.Resource):
         flask.abort(self.err)
 
 
-class APIWithBlueprintTestCase(unittest.TestCase):
+class TestAPIWithBlueprint(object):
 
     def test_api_base(self):
         blueprint = Blueprint('test', __name__)

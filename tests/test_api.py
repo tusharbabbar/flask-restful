@@ -1,4 +1,3 @@
-import unittest
 from flask import Flask, redirect, views
 from flask.signals import got_request_exception, signals_available
 try:
@@ -31,7 +30,7 @@ class HelloWorld(flask_restful.Resource):
         return {}
 
 
-class APITestCase(unittest.TestCase):
+class TestAPI(object):
 
     def test_http_code(self):
         assert http_status_message(200) == 'OK'

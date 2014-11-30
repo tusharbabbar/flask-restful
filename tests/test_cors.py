@@ -1,10 +1,9 @@
-import unittest
 from flask import Flask
 import flask_restful
 from flask_restful.utils import cors
 
 
-class CORSTestCase(unittest.TestCase):
+class TestCORS(object):
 
     def test_crossdomain(self):
 

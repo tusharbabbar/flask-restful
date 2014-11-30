@@ -1,5 +1,4 @@
 from decimal import Decimal
-import unittest
 from mock import Mock
 from flask.ext.restful.fields import MarshallingException
 from flask_restful import fields
@@ -51,7 +50,7 @@ def test_boolean(value, expected):
     check_field(expected, fields.Boolean(), value)
 
 
-class FieldsTestCase(unittest.TestCase):
+class TestFields(object):
 
     def test_decimal_trash(self):
         with pytest.raises(MarshallingException):

@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta, tzinfo
-import unittest
 
 import pytest
 import six
@@ -122,7 +121,7 @@ def test_bad_url_error_message(value):
     check_url_error_message(value)
 
 
-class TypesTestCase((unittest.TestCase)):
+class TestInputs(object):
 
     def test_boolean_false(self):
         assert inputs.boolean("False") == False
