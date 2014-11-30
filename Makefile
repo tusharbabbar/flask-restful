@@ -92,13 +92,14 @@ depends: .depends-ci .depends-dev
 
 .PHONY: .depends-ci
 .depends-ci: env Makefile $(DEPENDS_CI)
-$(DEPENDS_CI): Makefile
-	$(PIP) install $(PIP_CACHE) --upgrade flake8 pep257 pytest coverage mock nose
+$(DEPENDS_CI): Makefile tests/requirements.txt
+	$(PIP) install $(PIP_CACHE) --upgrade flake8 pep257
+	$(PIP) install -r tests/requirements.txt
 	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
 
 .PHONY: .depends-dev
 .depends-dev: env Makefile $(DEPENDS_DEV)
-$(DEPENDS_DEV): Makefile
+$(DEPENDS_DEV): Makefile tests/requirements.txt
 	$(PIP) install $(PIP_CACHE) --upgrade pep8radius pygments wheel
 	touch $(DEPENDS_DEV)  # flag to indicate dependencies are installed
 
@@ -135,10 +136,13 @@ fix: .depends-dev
 
 # Testing ####################################################################
 
+PYTEST_OPTS := --cov $(PACKAGE) \
+			   --cov-report term-missing \
+			   --cov-report html
+
 .PHONY: test
 test: .depends-ci
-	$(COVERAGE) run --source $(PACKAGE) -m py.test tests
-	$(COVERAGE) report -m
+	$(PYTEST) tests $(PYTEST_OPTS)
 
 .PHONY: htmlcov
 htmlcov: test
