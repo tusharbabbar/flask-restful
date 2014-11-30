@@ -342,7 +342,7 @@ class TestAPI(object):
         app = app.test_client()
 
         resp = app.get("/foo")
-        assert resp.status_code ==  404
+        assert resp.status_code == 404
         assert resp.headers['Content-Type'] == 'text/html'
 
     def test_non_api_error_404_catchall(self):
@@ -389,7 +389,7 @@ class TestAPI(object):
 
         with app.test_request_context("/foo"):
             resp = api.handle_error(exception)
-            assert resp.status_code ==  400
+            assert resp.status_code == 400
             assert resp.data.decode() == dumps({
                 'foo': 'bar',
             })
@@ -408,14 +408,14 @@ class TestAPI(object):
 
         with app.test_request_context("/faaaaa"):
             resp = api.handle_error(exception)
-            assert resp.status_code ==  404
+            assert resp.status_code == 404
             assert resp.data.decode() == dumps({
                 "status": 404, "message": "Not Found",
             })
 
         with app.test_request_context("/fOo"):
             resp = api.handle_error(exception)
-            assert resp.status_code ==  404
+            assert resp.status_code == 404
             assert resp.data.decode() == dumps({
                 "status": 404, "message": "Not Found. You have requested this URI [/fOo] but did you mean /foo ?",
             })
@@ -423,7 +423,7 @@ class TestAPI(object):
         with app.test_request_context("/fOo"):
             del exception.data["message"]
             resp = api.handle_error(exception)
-            assert resp.status_code ==  404
+            assert resp.status_code == 404
             assert resp.data.decode() == dumps({
                 "status": 404, "message": "You have requested this URI [/fOo] but did you mean /foo ?",
             })
@@ -433,7 +433,7 @@ class TestAPI(object):
         with app.test_request_context("/fOo"):
             del exception.data["message"]
             resp = api.handle_error(exception)
-            assert resp.status_code ==  404
+            assert resp.status_code == 404
             assert resp.data.decode() == dumps({
                 "status": 404
             })
@@ -568,7 +568,7 @@ class TestAPI(object):
         with app.test_request_context("/foo"):
             wrapper = api.output(make_empty_response)
             resp = wrapper()
-            assert resp.status_code ==  200
+            assert resp.status_code == 200
             assert resp.data.decode() == '{"foo": "bar"}'
 
     def test_output_func(self):
@@ -582,7 +582,7 @@ class TestAPI(object):
         with app.test_request_context("/foo"):
             wrapper = api.output(make_empty_resposne)
             resp = wrapper()
-            assert resp.status_code ==  200
+            assert resp.status_code == 200
             assert resp.data.decode() == ''
 
     def test_resource(self):
@@ -764,6 +764,7 @@ class TestAPI(object):
 
         class FooResource(flask_restful.Resource):
             fields = {'foo': flask_restful.fields.Float}
+
             def get(self):
                 return flask_restful.marshal({"foo": 3.0}, self.fields)
 

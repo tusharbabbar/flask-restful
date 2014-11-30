@@ -118,13 +118,15 @@ read: doc
 .PHONY: check
 check: flake8 pep257
 
+PEP8_IGNORED := E501
+
 .PHONY: pep8
 pep8: .depends-ci
-	$(PEP8) $(PACKAGE) --ignore=E501
+	$(PEP8) $(PACKAGE) tests --ignore=$(PEP8_IGNORED)
 
 .PHONY: flake8
 flake8: .depends-ci
-	$(FLAKE8) $(PACKAGE) --ignore=E501
+	$(FLAKE8) $(PACKAGE) tests --ignore=$(PEP8_IGNORED)
 
 .PHONY: pep257
 pep257: .depends-ci

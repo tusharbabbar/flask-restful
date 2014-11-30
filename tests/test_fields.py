@@ -11,6 +11,7 @@ try:
 except ImportError:
     from flask.ext.restful.utils.ordereddict import OrderedDict
 
+
 class Foo(object):
     def __init__(self):
         self.hey = 3
@@ -64,7 +65,7 @@ class TestFields(object):
     def test_no_attribute(self):
         obj = {"bar": 3}
         field = fields.String()
-        assert field.output("foo", obj) == None
+        assert field.output("foo", obj) is None
 
     def test_date_field_invalid(self):
         obj = {"bar": 3}

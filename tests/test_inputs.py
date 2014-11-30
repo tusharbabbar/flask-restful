@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, tzinfo
+from datetime import datetime
 
 import pytest
 import six
@@ -124,28 +124,28 @@ def test_bad_url_error_message(value):
 class TestInputs(object):
 
     def test_boolean_false(self):
-        assert inputs.boolean("False") == False
+        assert inputs.boolean("False") is False
 
     def test_boolean_is_false_for_0(self):
-        assert inputs.boolean("0") == False
+        assert inputs.boolean("0") is False
 
     def test_boolean_true(self):
-        assert inputs.boolean("true") == True
+        assert inputs.boolean("true") is True
 
     def test_boolean_is_true_for_1(self):
-        assert inputs.boolean("1") == True
+        assert inputs.boolean("1") is True
 
     def test_boolean_upper_case(self):
-        assert inputs.boolean("FaLSE") == False
+        assert inputs.boolean("FaLSE") is False
 
     def test_boolean(self):
-        assert inputs.boolean("FaLSE") == False
+        assert inputs.boolean("FaLSE") is False
 
     def test_boolean_with_python_bool(self):
         """Input that is already a native python `bool` should be passed through
         without extra processing."""
-        assert inputs.boolean(True) == True
-        assert inputs.boolean(False) == False
+        assert inputs.boolean(True) is True
+        assert inputs.boolean(False) is False
 
     def test_bad_boolean(self):
         with pytest.raises(ValueError):

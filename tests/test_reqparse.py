@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from mock import Mock, patch, NonCallableMock
+from mock import Mock, patch
 from flask import Flask
 from werkzeug import MultiDict
 from werkzeug.exceptions import BadRequest
@@ -80,15 +80,15 @@ class TestReqParse(object):
 
     def test_default(self):
         arg = Argument("foo", default=True)
-        assert arg.default == True
+        assert arg.default is True
 
     def test_required(self):
         arg = Argument("foo", required=True)
-        assert arg.required == True
+        assert arg.required is True
 
     def test_ignore(self):
         arg = Argument("foo", ignore=True)
-        assert arg.ignore == True
+        assert arg.ignore is True
 
     def test_operator(self):
         arg = Argument("foo", operators=[">=", "<=", "="])
@@ -108,7 +108,7 @@ class TestReqParse(object):
 
     def test_default_dest(self):
         arg = Argument("foo")
-        assert arg.dest == None
+        assert arg.dest is None
 
     def test_default_operators(self):
         arg = Argument("foo")
@@ -124,15 +124,15 @@ class TestReqParse(object):
 
     def test_default_default(self):
         arg = Argument("foo")
-        assert arg.default == None
+        assert arg.default is None
 
     def test_required_default(self):
         arg = Argument("foo")
-        assert arg.required == False
+        assert arg.required is False
 
     def test_ignore_default(self):
         arg = Argument("foo")
-        assert arg.ignore == False
+        assert arg.ignore is False
 
     def test_action_default(self):
         arg = Argument("foo")
@@ -190,7 +190,7 @@ class TestReqParse(object):
         parser = RequestParser()
         parser.add_argument("foo", type=str, store_missing=True)
         args = parser.parse_args(req)
-        assert args["foo"] == None
+        assert args["foo"] is None
 
     def test_parse_unicode(self):
         req = Request.from_values("/bubble?foo=barß")
@@ -218,7 +218,7 @@ class TestReqParse(object):
 
         with app.test_request_context('/bubble', method="post"):
             args = parser.parse_args()
-            assert args['foo'] == None
+            assert args['foo'] is None
 
     def test_get_json_location(self):
         app = Flask(__name__)
@@ -240,7 +240,7 @@ class TestReqParse(object):
                             store_missing=True),
 
         args = parser.parse_args(req)
-        assert args['foo'] == None
+        assert args['foo'] is None
 
     def test_parse_append_default(self):
         req = Request.from_values("/bubble?")
@@ -249,7 +249,7 @@ class TestReqParse(object):
         parser.add_argument("foo", action="append", store_missing=True),
 
         args = parser.parse_args(req)
-        assert args['foo'] == None
+        assert args['foo'] is None
 
     def test_parse_append(self):
         req = Request.from_values("/bubble?foo=bar&foo=bat")
@@ -308,7 +308,7 @@ class TestReqParse(object):
         parser.add_argument("foo", ignore=True, store_missing=True)
 
         args = parser.parse_args(Request.from_values("/bubble"))
-        assert args['foo'] == None
+        assert args['foo'] is None
 
     def test_parse_lte_gte_mock(self):
         mock_type = Mock()
@@ -425,7 +425,7 @@ class TestReqParse(object):
         parser.add_argument("foo")
 
         args = parser.parse_args(req)
-        assert args['foo'] == None
+        assert args['foo'] is None
 
     def test_parse_store_missing(self):
         req = Request.from_values("/bubble")
@@ -488,7 +488,7 @@ class TestReqParse(object):
         parser.add_argument("foo", type=int, ignore=True, store_missing=True),
 
         args = parser.parse_args(req)
-        assert args['foo'] == None
+        assert args['foo'] is None
 
     def test_chaining(self):
         parser = RequestParser()
@@ -522,7 +522,7 @@ class TestReqParse(object):
                                       data=json.dumps({"foo": None}),
                                       content_type='application/json'):
             args = parser.parse_args()
-            assert args['foo'] == None
+            assert args['foo'] is None
 
     def test_type_callable(self):
         req = Request.from_values("/bubble?foo=1")
@@ -543,7 +543,7 @@ class TestReqParse(object):
                                       data=json.dumps({"foo": None}),
                                       content_type='application/json'):
             args = parser.parse_args()
-            assert args['foo'] == None
+            assert args['foo'] is None
 
     def test_type_decimal(self):
         app = Flask(__name__)
