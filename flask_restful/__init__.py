@@ -536,9 +536,18 @@ class Resource(MethodView):
     method_decorators = []
 
     def dispatch_request(self, *args, **kwargs):
+        import os, time
+        f = None
+        if os.path.exists('/tmp/time.log'):
+            try:
+                f = open('/tmp/time.log','a')
+            except IOError as e:
+                pass
 
         # Taken from flask
         #noinspection PyUnresolvedReferences
+        start_time = time.time()
+        time_string = '{start_time}:::{end_time}:::{args}:::{data}\n'
         meth = getattr(self, request.method.lower(), None)
         if meth is None and request.method == 'HEAD':
             meth = getattr(self, 'get', None)
@@ -550,6 +559,12 @@ class Resource(MethodView):
         resp = meth(*args, **kwargs)
 
         if isinstance(resp, ResponseBase):  # There may be a better way to test
+            end_time = time.time()
+            time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' ')
+            print time_string
+            if f:
+                f.write(time_string)
+                f.flush()
             return resp
 
         representations = self.representations or {}
@@ -560,8 +575,19 @@ class Resource(MethodView):
             data, code, headers = unpack(resp)
             resp = representations[mediatype](data, code, headers)
             resp.headers['Content-Type'] = mediatype
+            end_time = time.time()
+            time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' ')
+            print time_string
+            if f:
+                f.write(time_string)
+                f.flush()
             return resp
-
+        end_time = time.time()
+        time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' ')
+        print time_string
+        if f:
+            f.write(time_string)
+            f.flush()
         return resp
 
 
