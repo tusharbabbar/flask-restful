@@ -560,7 +560,7 @@ class Resource(MethodView):
 
         if isinstance(resp, ResponseBase):  # There may be a better way to test
             end_time = time.time()
-            time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
+            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
             print time_string
             if f:
                 f.write(time_string)
@@ -576,14 +576,14 @@ class Resource(MethodView):
             resp = representations[mediatype](data, code, headers)
             resp.headers['Content-Type'] = mediatype
             end_time = time.time()
-            time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
+            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
             print time_string
             if f:
                 f.write(time_string)
                 f.flush()
             return resp
         end_time = time.time()
-        time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
+        time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
         print time_string
         if f:
             f.write(time_string)
