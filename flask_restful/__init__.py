@@ -547,7 +547,7 @@ class Resource(MethodView):
         # Taken from flask
         #noinspection PyUnresolvedReferences
         start_time = time.time()
-        time_string = '{start_time}:::{end_time}:::{args}:::{data}\n'
+        time_string = '{start_time}:::{end_time}:::{base_url}:::{args}:::{data}\n'
         meth = getattr(self, request.method.lower(), None)
         if meth is None and request.method == 'HEAD':
             meth = getattr(self, 'get', None)
@@ -560,7 +560,7 @@ class Resource(MethodView):
 
         if isinstance(resp, ResponseBase):  # There may be a better way to test
             end_time = time.time()
-            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
+            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '), base_url = request.base_url)
             print time_string
             if f:
                 f.write(time_string)
@@ -576,14 +576,14 @@ class Resource(MethodView):
             resp = representations[mediatype](data, code, headers)
             resp.headers['Content-Type'] = mediatype
             end_time = time.time()
-            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
+            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '), base_url = request.base_url)
             print time_string
             if f:
                 f.write(time_string)
                 f.flush()
             return resp
         end_time = time.time()
-        time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '))
+        time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '), base_url = request.base_url)
         print time_string
         if f:
             f.write(time_string)
