@@ -538,16 +538,15 @@ class Resource(MethodView):
     def dispatch_request(self, *args, **kwargs):
         import os, time
         f = None
-        if os.path.exists('/tmp/time.log'):
-            try:
-                f = open('/tmp/time.log','a')
-            except IOError as e:
-                pass
+        try:
+            f = open('/tmp/time.log','a')
+        except IOError as e:
+            pass
 
         # Taken from flask
         #noinspection PyUnresolvedReferences
         start_time = time.time()
-        time_string = '{start_time}:::{end_time}:::{base_url}:::{args}:::{data}\n'
+        time_string = '{start_time}:::{end_time}:::{time_diff}:::{base_url}:::{args}:::{data}\n'
         meth = getattr(self, request.method.lower(), None)
         if meth is None and request.method == 'HEAD':
             meth = getattr(self, 'get', None)
@@ -560,7 +559,7 @@ class Resource(MethodView):
 
         if isinstance(resp, ResponseBase):  # There may be a better way to test
             end_time = time.time()
-            time_string = time_string.format(start_time = start_time, end_time = end_time, args = str(request.args), data = request.data.replace('\n',' '), base_url = request.base_url)
+            time_string = time_string.format(start_time = start_time, end_time = end_time, time_diff=end_time-start_time, args = str(request.args), data = request.data.replace('\n',' '), base_url = request.base_url)
             print time_string
             if f:
                 f.write(time_string)
